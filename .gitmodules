@@ -4,6 +4,7 @@
 [submodule "src/cuda/cutlass-bench"]
 	path = src/cuda/cutlass-bench
 	url = https://github.com/haiyuem/cutlass.git
+	branch = micro26_e51efbfe
 [submodule "src/cuda/cuda-samples"]
 	path = src/cuda/cuda-samples
 	url = https://github.com/NVIDIA/cuda-samples.git
