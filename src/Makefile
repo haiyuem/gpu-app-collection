@@ -415,6 +415,20 @@ shoc:
 	mv cuda/shoc-master/src/cuda/level2/s3d/S3D $(BINDIR)/$(BINSUBDIR)/shoc-S3D
 	mv cuda/shoc-master/src/stability/Stability $(BINDIR)/$(BINSUBDIR)/shoc-Stability
 
+shoc-FFT:
+	mkdir -p $(BINDIR)/$(BINSUBDIR)/
+	cd cuda/shoc-master/; ./configure
+	$(SETENV) make $(MAKE_ARGS) -C cuda/shoc-master/src/cuda/level1/fft
+	mv cuda/shoc-master/src/cuda/level1/fft/FFT $(BINDIR)/$(BINSUBDIR)/shoc-FFT
+
+ubench_l2_bw_128:
+	$(SETENV) make $(MAKE_ARGS) -C cuda/GPU_Microbenchmark/ubench/l2_cache/l2_bw_128
+	cp -r cuda/GPU_Microbenchmark/bin/* $(BINDIR)/$(BINSUBDIR)/
+
+ubench_l2_config:
+	$(SETENV) make $(MAKE_ARGS) -C cuda/GPU_Microbenchmark/ubench/l2_cache/l2_config
+	cp -r cuda/GPU_Microbenchmark/bin/* $(BINDIR)/$(BINSUBDIR)/
+
 custom_apps:
 #   $(SETENV) $(MAKE) $(MAKE_ARGS) noinline=$(noinline) -C cuda/custom-apps/shoc-modified-spmv/
 #	$(SETENV) $(MAKE) $(MAKE_ARGS) noinline=$(noinline) -C cuda/custom-apps/rodinia-kmn-no-tex/
@@ -447,6 +461,15 @@ cutlass_examples_turing:
 	$(SETENV) mkdir -p cuda/cutlass-bench/build && cd cuda/cutlass-bench/build && cmake .. -DUSE_GPGPUSIM=1 -DCUTLASS_NVCC_ARCHS=75 && cd ./examples/09_turing_tensorop_conv2dfprop && $(MAKE) 09_turing_tensorop_conv2dfprop
 	echo $(BINDIR)
 	cp cuda/cutlass-bench/build/examples/09_turing_tensorop_conv2dfprop/09_turing_tensorop_conv2dfprop $(BINDIR)/$(BINSUBDIR)/turing_tensorop_conv2dfrop
+
+cutlass_examples_ampere_gemm_streamk:
+	mkdir -p $(BINDIR)/$(BINSUBDIR)/
+	git submodule init && git submodule update
+	$(SETENV) mkdir -p cuda/cutlass-bench/build && cd cuda/cutlass-bench/build && cmake .. -DUSE_GPGPUSIM=1 -DCUTLASS_NVCC_ARCHS=80 && cd ./examples/47_ampere_gemm_universal_streamk && $(MAKE) 47_ampere_gemm_universal_streamk
+	echo $(BINDIR)
+	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk
+	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk_128_28k_4k
+	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk_1k_12k_4k
 
 # Maybe we should use submodules for this - but I have heard a lot of horor stories about these..
 # For now - lets just clone if we don't have it and set the SHA we want.
