@@ -462,6 +462,13 @@ cutlass_examples_turing:
 	echo $(BINDIR)
 	cp cuda/cutlass-bench/build/examples/09_turing_tensorop_conv2dfprop/09_turing_tensorop_conv2dfprop $(BINDIR)/$(BINSUBDIR)/turing_tensorop_conv2dfrop
 
+cutlass_examples_basic_gemm:
+	mkdir -p $(BINDIR)/$(BINSUBDIR)/
+	git submodule init && git submodule update
+	$(SETENV) mkdir -p cuda/cutlass-bench/build && cd cuda/cutlass-bench/build && cmake .. -DUSE_GPGPUSIM=1 -DCUTLASS_NVCC_ARCHS=80 && cd ./examples/00_basic_gemm && $(MAKE) 00_basic_gemm
+	echo $(BINDIR)
+	cp cuda/cutlass-bench/build/examples/00_basic_gemm/00_basic_gemm $(BINDIR)/$(BINSUBDIR)/basic_gemm
+
 cutlass_examples_ampere_gemm_streamk:
 	mkdir -p $(BINDIR)/$(BINSUBDIR)/
 	git submodule init && git submodule update
@@ -470,6 +477,7 @@ cutlass_examples_ampere_gemm_streamk:
 	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk
 	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk_128_28k_4k
 	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk_1k_12k_4k
+	cp cuda/cutlass-bench/build/examples/47_ampere_gemm_universal_streamk/47_ampere_gemm_universal_streamk $(BINDIR)/$(BINSUBDIR)/gemm_streamk_4k_12k_4k
 
 # Maybe we should use submodules for this - but I have heard a lot of horor stories about these..
 # For now - lets just clone if we don't have it and set the SHA we want.
